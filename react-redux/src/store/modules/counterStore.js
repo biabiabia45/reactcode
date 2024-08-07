@@ -6,7 +6,7 @@ const counterStore = createSlice({
     initialState: {
         count: 0
     },
-    // 修改state的操作
+    // 修改state的操作 actionCreater
     reducers: {
         inscrement(state) {
             state.count++
