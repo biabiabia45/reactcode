@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from "axios";
 import { Button, Cascader, Checkbox, Form, Input, Select } from "antd";
 import "./styles.css";
 
@@ -70,9 +70,43 @@ const tailFormItemLayout = {
 };
 const Register = () => {
   const [form] = Form.useForm();
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+
+  const onFinish = async (values) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/wallet-online/users",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: values.nickname, // 对应 "username" 字段
+            password: values.password, // 对应 "password" 字段
+            contactInfo: {
+              email: values.email, // 对应 "contactInfo.email" 字段
+              address: values.residence.join(", "), // 对应 "contactInfo.address" 字段
+            },
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("User created successfully:", result);
+        // Handle successful user creation, e.g., redirect to login page or show a success message
+      } else {
+        const errorMessage = await response.text();
+        console.error("Error creating user:", errorMessage);
+        // Handle error response, e.g., show an error message to the user
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      // Handle network error
+    }
   };
+
+
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
@@ -208,7 +242,7 @@ const Register = () => {
           <Cascader options={residences} />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           name="phone"
           label="电话号码"
           rules={[
@@ -228,9 +262,9 @@ const Register = () => {
               width: "100%",
             }}
           />
-        </Form.Item>
+        </Form.Item> */}
 
-        <Form.Item
+        {/* <Form.Item
           name="gender"
           label="性别"
           rules={[
@@ -245,7 +279,7 @@ const Register = () => {
             <Option value="female">女</Option>
             <Option value="ig">保密</Option>
           </Select>
-        </Form.Item>
+        </Form.Item> */}
 
         {/* <Form.Item
           label="Captcha"
