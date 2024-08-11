@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "antd": "^5.20.0",
     "axios": "^1.7.3",
     "create-react-app": "^5.0.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "react-router-dom": "^6.26.0"
   }
 }

@@ -1,0 +1,18 @@
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ffffff
+}
+
+.center-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* wrapperCol={{
+        xs: { span: 24, offset: 0 },
+        sm: { span: 10, offset: 7 },
+      }}
+      style={{ display: 'flex', justifyContent: 'center' }} */
+}
