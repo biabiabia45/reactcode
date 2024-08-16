@@ -4,6 +4,7 @@ import { Button, Checkbox, Form, Input, Space } from "antd";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./styles.css";
+import "../ChangePassword";
 
 const TrueLogin = () => {
   const navigate = useNavigate();
@@ -30,7 +31,18 @@ const TrueLogin = () => {
         // Handle successful login, e.g., redirect or store token
       } else {
         console.error("Login failed:", response.data);
-        // Handle unsuccessful login
+        form.setFields([
+          {
+            name: "username",
+            errors: [errorMessage || "用户名或密码错误"], // 显示错误信息
+            value: values.username,
+          },
+          {
+            name: "password",
+            errors: [errorMessage || "用户名或密码错误"], // 显示错误信息
+            value: values.password,
+          },
+        ]);
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -55,11 +67,11 @@ const TrueLogin = () => {
         rules={[
           {
             required: true,
-            message: "请输入你的用户名!",
+            message: "请输入你的用户名/邮箱!",
           },
         ]}
       >
-        <Input prefix={<UserOutlined />} placeholder="账号/邮箱" />
+        <Input prefix={<UserOutlined />} placeholder="用户名/邮箱" />
       </Form.Item>
 
       <Form.Item
@@ -90,7 +102,7 @@ const TrueLogin = () => {
         </Button>
         <Space>
           <Link to="/Register">注册账号</Link>
-          <a href="">修改密码</a>
+          <Link to="/ChangePassword">修改密码</Link>
         </Space>
       </Form.Item>
     </Form>

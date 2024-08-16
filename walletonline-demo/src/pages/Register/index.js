@@ -1,39 +1,58 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Cascader, Checkbox, Form, Input, Select } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { Space, Button, Cascader, Checkbox, Form, Input, Select } from "antd";
 import "./styles.css";
 
 const { Option } = Select;
 const residences = [
   {
-    value: "zhejiang",
-    label: "Zhejiang",
+    value: "陕西",
+    label: "陕西",
     children: [
       {
-        value: "hangzhou",
-        label: "Hangzhou",
+        value: "西安",
+        label: "西安",
         children: [
           {
-            value: "xihu",
-            label: "West Lake",
+            value: "雁塔区",
+            label: "雁塔区",
+          },
+          {
+            value: "碑林区",
+            label: "碑林区",
           },
         ],
       },
     ],
   },
   {
-    value: "jiangsu",
-    label: "Jiangsu",
+    value: "浙江",
+    label: "浙江",
     children: [
       {
-        value: "nanjing",
-        label: "Nanjing",
+        value: "杭州",
+        label: "杭州",
         children: [
           {
-            value: "zhonghuamen",
-            label: "Zhong Hua Men",
+            value: "西湖区",
+            label: "西湖区",
+          },
+          {
+            value: "上城区",
+            label: "上城区",
           },
         ],
+      },
+    ],
+  },
+  {
+    value: "重庆",
+    label: "重庆",
+    children: [
+      {
+        value: "九龙坡区",
+        label: "九龙坡区",
       },
     ],
   },
@@ -70,6 +89,8 @@ const tailFormItemLayout = {
 };
 const Register = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const [nicknameError, setNicknameError] = useState("");
 
   const onFinish = async (values) => {
     try {
@@ -94,19 +115,20 @@ const Register = () => {
       if (response.ok) {
         const result = await response.json();
         console.log("User created successfully:", result);
-        // Handle successful user creation, e.g., redirect to login page or show a success message
+        navigate("/");
+      } else if (response.status === 400) {
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.error || "用户名已存在"; // 设置默认的错误消息
+        setNicknameError(errorMessage); // 更新状态
+        form.validateFields(["nickname"]); // 触发字段验证
       } else {
         const errorMessage = await response.text();
         console.error("Error creating user:", errorMessage);
-        // Handle error response, e.g., show an error message to the user
       }
     } catch (error) {
       console.error("Error during registration:", error);
-      // Handle network error
     }
   };
-
-
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
@@ -153,7 +175,7 @@ const Register = () => {
         name="register"
         onFinish={onFinish}
         initialValues={{
-          residence: ["zhejiang", "hangzhou", "xihu"],
+          residence: ["陕西", "西安", "雁塔区"],
           prefix: "86",
         }}
         style={{
@@ -170,7 +192,15 @@ const Register = () => {
               message: "请输入您的用户名称!",
               whitespace: true,
             },
+            {
+              validator: (_, value) =>
+                nicknameError
+                  ? Promise.reject(nicknameError)
+                  : Promise.resolve(),
+            },
           ]}
+          help={nicknameError} // 显示错误信息
+          validateStatus={nicknameError ? "error" : ""} // 根据错误信息设置验证状态
         >
           <Input />
         </Form.Item>
@@ -198,6 +228,10 @@ const Register = () => {
             {
               required: true,
               message: "请输入您的密码!",
+            },
+            {
+              pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/,
+              message: "密码必须为8-16位的数字和字母的组合",
             },
           ]}
           hasFeedback
@@ -314,7 +348,7 @@ const Register = () => {
               validator: (_, value) =>
                 value
                   ? Promise.resolve()
-                  : Promise.reject(new Error("Should accept agreement")),
+                  : Promise.reject(new Error("请同意服务协议！")),
             },
           ]}
           {...tailFormItemLayout}
@@ -330,9 +364,12 @@ const Register = () => {
             sm: { span: 10, offset: 7 },
           }}
         >
-          <Button type="primary" htmlType="submit">
-            立即注册
-          </Button>
+          <Space>
+            <Button type="primary" htmlType="submit" onClick={onFinish}>
+              立即注册
+            </Button>
+            <Button onClick={() => navigate(-1)}>取消</Button>
+          </Space>
         </Form.Item>
       </Form>
     </div>

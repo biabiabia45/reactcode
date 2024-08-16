@@ -4,6 +4,9 @@ import {
   MailOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
+import User from "../User";
+import Wallet from "../Wallet";
+import Transaction from "../Transaction";
 import { Menu as AntdMenu } from "antd";
 
 const items = [
@@ -28,26 +31,26 @@ const items = [
     icon: <AppstoreOutlined />,
     children: [
       {
-        key: "5",
+        key: "3",
         label: "创建账户",
       },
       {
-        key: "6",
+        key: "4",
         label: "删除账户",
       },
     ],
   },
   {
-    key: "sub4",
+    key: "sub3",
     label: "转账",
     icon: <SettingOutlined />,
     children: [
       {
-        key: "9",
+        key: "5",
         label: "转账",
       },
       {
-        key: "10",
+        key: "6",
         label: "转账记录",
       },
     ],

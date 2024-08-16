@@ -1,6 +1,11 @@
 import Menu from "../pages/Menu";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import User from "../pages/User";
+import Wallet from "../pages/Wallet";
+import ChangePassword from "../pages/ChangePassword";
+import Transaction from "../pages/Transaction";
+
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -13,8 +18,26 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
+    path: "/ChangePassword",
+    element: <ChangePassword />,
+  },
+  {
     path: "/Menu",
     element: <Menu />,
+    children: [
+      {
+        path: "User",
+        element: <User />,
+      },
+      {
+        path: "Wallet",
+        element: <Wallet />,
+      },
+      {
+        path: "Transaction",
+        element: <Transaction />,
+      },
+    ],
   },
 ]);
 
